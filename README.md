@@ -3,7 +3,7 @@
  
 ### Clone the Repository
 ```
-git clone git@github.com:karthik540/Police_Survillence_Assistant.git
+git clone git@github.com:karthik540/TodoApp.git
 ```
 
 ### Installing the dependencies
