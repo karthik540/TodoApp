@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">   
+     
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <div class="jumbotron text-center">
+        <h1>Welcome [[ userdetails.name ]]</h1>
+        <h5>This content is totally randome</h5>
+        <button type="button" class="btn btn-primary" v-on:click="addTodo();">Save Todo</button>
+        <h5>Note: Most of the output are currently printed on console.</h5>
+        <h5>Some yet to link with temp UI</h5>
+    </div>
+
+    {% include 'loginForm.html' %}
+    {% include 'signupForm.html' %}
+    {% include 'todoList.html' %}
+    {% include 'footer.html' %}
+    
+</div>
+    <script>
+
+    var app = new Vue({
+        el: '#app',
+        delimiters: ['[[' , ']]'],
+        data:{
+            someName: 'to Todo App',
+            userdetails: {name : "to Todo App"},
+            items: [
+                {name : 'Math Homework'},
+                {name : 'Finishing this Todo app'},
+                {name : 'Doing UI/UX'},
+            ]
+        },
+        methods: {
+            loginHandler: function()
+            {
+                $.ajax({
+                    type: 'POST',
+                    url: '/app/agent/auth',
+                    //data: $("#LoginForm").serialize(),
+                    data: {'agent_id' : 123 , 'password' : "deku"},
+                    success: function(response)
+                    {
+                        //console.log(response.userdetails);
+                        //this.userdetails = response.userdetails;
+                        console.log(response);
+                    }
+                })
+            },
+            signupHandler: function()
+            {
+                $.ajax({
+                    type: 'POST',
+                    url: '/app/agent',
+                    //data: $("#SignupForm").serialize(),
+                    data: {'agent_id' : 123 , 'password' : "deku"},
+                    success: function(response)
+                    {
+                        console.log(response);
+                    }
+                })
+            },
+            logout: function()
+            {
+                $.ajax({
+                    type: 'POST',
+                    url: '/logout',
+                    success: function(response)
+                    {
+                        console.log(response);
+                    }
+                })
+            },
+            addItem: function()
+            {
+                var item = document.getElementById("itemName").value;
+                console.log(item);
+                this.items.push({name : item});
+                document.getElementById("itemName").value = "";
+            },
+            addTodo: function()
+            {
+                var reqData = {
+                    'title' : "Homework" , 
+                    'description' : "To complete Math problems.",
+                    'category' : "School",
+                    //'due_date' : new Date(2007 , 12 , 29)
+                    'due_date' : "12-12-2007"
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '/app/sites?agent=123',
+                    //data: $("#SignupForm").serialize(),
+                    data: reqData,
+                    success: function(response)
+                    {
+                        console.log(response);
+                    }
+                })
+            },
+            fetchTodo : function()
+            {
+                $.ajax({
+                    type: 'GET',
+                    url: '/app/sites/list/?agent=123',
+                    //data: $("#SignupForm").serialize(),
+                    success: function(response)
+                    {
+                        console.log(response);
+                    }
+                })
+            }
+        }
+    })
+    
+    </script>
+</body>
+</html>
